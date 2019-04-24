@@ -13,6 +13,8 @@ import java.util.Random;
 import pkgEnum.ePuzzleViolation;
 import pkgHelper.LatinSquare;
 import pkgHelper.PuzzleViolation;
+
+import pkgEnum.eGameDifficulty;
  
 
 /**
@@ -47,6 +49,13 @@ public class Sudoku extends LatinSquare implements Serializable {
 
 	private HashMap<Integer, SudokuCell> cells = new HashMap<Integer, SudokuCell>();
 	
+	private eGameDifficulty eGameDifficulty;
+	
+	private Sudoku() {
+		this.eGameDifficulty = eGameDifficulty.EASY;
+	}
+	
+	
 	/**
 	 * Sudoku - for Lab #2... do the following:
 	 * 
@@ -61,7 +70,8 @@ public class Sudoku extends LatinSquare implements Serializable {
 	 * @throws Exception if the iSize given doesn't have a whole number square root
 	 */
 	public Sudoku(int iSize) throws Exception {
-
+		this();
+		
 		this.iSize = iSize;
 
 		double SQRT = Math.sqrt(iSize);
@@ -91,7 +101,9 @@ public class Sudoku extends LatinSquare implements Serializable {
 	 *                   whole number square root
 	 */
 	public Sudoku(int[][] puzzle) throws Exception {
-		super(puzzle);
+		this();
+		this.setLatinSquare(puzzle);
+		
 		this.iSize = puzzle.length;
 		double SQRT = Math.sqrt(iSize);
 		if ((SQRT == Math.floor(SQRT)) && !Double.isInfinite(SQRT)) {
@@ -100,6 +112,13 @@ public class Sudoku extends LatinSquare implements Serializable {
 			throw new Exception("Invalid size");
 		}
 
+	}
+	
+	public Sudoku(int iSize, eGameDifficulty eGD) throws Exception {
+		this(iSize);
+		this.eGameDifficulty = eGD;
+		
+		RemoveCells();
 	}
 
 	
@@ -572,6 +591,19 @@ public class Sudoku extends LatinSquare implements Serializable {
 		}
 	}
 	
+	private void SetRemainingCells() {
+		for (int iRow = 0; iRow < iSize; iRow++) {
+			for (int iCol = 0; iCol < iSize; iCol++) {
+				SudokuCell c = new SudokuCell(iRow, iCol);
+				c.setlstValidValues(getAllValidCellValues(iCol, iRow));
+				cells.put(c.hashCode(), c);
+			}
+		}
+	}
+	
+	private static int PossibleValuesMultiplier(HashMap<Integer,Sudoku.SudokuCell> cells) {
+		
+	}
 		
 	/**
 	 * Cell - private class that handles possible remaining values
