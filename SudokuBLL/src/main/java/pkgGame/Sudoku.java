@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Random;
 
+import javassist.bytecode.Descriptor.Iterator;
 import pkgEnum.ePuzzleViolation;
 import pkgHelper.LatinSquare;
 import pkgHelper.PuzzleViolation;
@@ -51,7 +52,7 @@ public class Sudoku extends LatinSquare implements Serializable {
 	
 	private eGameDifficulty eGameDifficulty;
 	
-	private Sudoku() {
+	private Sudoku() throws Exception {
 		this.eGameDifficulty = eGameDifficulty.EASY;
 	}
 	
@@ -602,8 +603,34 @@ public class Sudoku extends LatinSquare implements Serializable {
 	}
 	
 	private static int PossibleValuesMultiplier(HashMap<Integer,Sudoku.SudokuCell> cells) {
-		
+		int score = 1;
+		for(Object value : cells.values()) {
+			SudokuCell c = (SudokuCell) value;
+			score*= c.getLstValidValues().size();
+		}
+		return score;
 	}
+	
+	private boolean IsDifficultyMet(int iPossibleValues) {
+		if(eGameDifficulty.get(iPossibleValues)==this.eGameDifficulty) {
+			return true;
+		}
+		return false;
+	}
+	
+	private void RemoveCells() {
+		Random rand = new SecureRandom();
+		int iRow;
+		int iCol;
+		while(!IsDifficultyMet(PossibleValuesMultiplier(this.cells))) {
+			iRow = rand.nextInt(this.iSize);
+			iCol = rand.nextInt(this.iSize);
+			this.getLatinSquare()[iRow][iCol] = 0;
+			this.SetRemainingCells();
+		}
+	}
+	
+	
 		
 	/**
 	 * Cell - private class that handles possible remaining values
