@@ -119,7 +119,7 @@ public class Sudoku extends LatinSquare implements Serializable {
 		this(iSize);
 		this.eGameDifficulty = eGD;
 		
-		RemoveCells();
+		this.RemoveCells();
 	}
 
 	
@@ -606,7 +606,8 @@ public class Sudoku extends LatinSquare implements Serializable {
 		int score = 1;
 		for(Object value : cells.values()) {
 			SudokuCell c = (SudokuCell) value;
-			score*= c.getLstValidValues().size();
+			if(c.getLstValidValues().size()!=0)
+				score*= c.getLstValidValues().size();
 		}
 		return score;
 	}

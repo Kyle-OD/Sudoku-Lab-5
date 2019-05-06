@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 import org.junit.Test;
+import pkgEnum.eGameDifficulty;
 
 public class SudokuTest {
 
@@ -125,17 +126,47 @@ public class SudokuTest {
 
 
 	@Test
-	public void Sudoku_FullPuzzle_1()
+	public void Sudoku_EasyDifficulty()
 	{
 		try {
-			Sudoku s1 = new Sudoku(9);
+			Sudoku s1 = new Sudoku(9, eGameDifficulty.EASY);
+			System.out.println("Easy Puzzle:");
 			s1.PrintPuzzle();
-			assertTrue(s1.isSudoku());
+			assertTrue(s1.isPartialSudoku());
 
 		} catch (Exception e) {
 			fail("Test failed to build a Sudoku");
 		}
 	}
+	
+	@Test
+	public void Sudoku_MediumDifficulty()
+	{
+		try {
+			Sudoku s1 = new Sudoku(9, eGameDifficulty.MEDIUM);
+			System.out.println("Medium Puzzle:");
+			s1.PrintPuzzle();
+			assertTrue(s1.isPartialSudoku());
+
+		} catch (Exception e) {
+			fail("Test failed to build a Sudoku");
+		}
+	}
+
+	@Test
+	public void Sudoku_HardDifficulty()
+	{
+		try {
+			Sudoku s1 = new Sudoku(9, eGameDifficulty.HARD);
+			System.out.println("Hard Puzzle:");
+			s1.PrintPuzzle();
+			assertTrue(s1.isPartialSudoku());
+
+		} catch (Exception e) {
+			fail("Test failed to build a Sudoku");
+		}
+	}
+
 
 
 
